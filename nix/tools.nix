@@ -55,6 +55,7 @@
 , ormolu
 , pkgsBuildBuild
 , poetry
+, pre-commit
 , pre-commit-hook-ensure-sops ? null
 , python3Packages
 , pyright ? nodePackages.pyright
@@ -140,6 +141,7 @@ in
     nixpkgs-fmt
     opentofu
     ormolu
+    pre-commit
     pre-commit-hook-ensure-sops
     poetry
     pyright

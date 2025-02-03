@@ -232,6 +232,19 @@ in
           };
         };
       };
+      check-hooks-apply = mkOption {
+        description = "ensures that the configured hooks apply to at least one file in the repository.";
+        type = types.submodule {
+          imports = [ hookModule ];
+        };
+      };
+
+      check-useless-excludes = mkOption {
+        description = "ensures that exclude directives apply to any file in the repository.";
+        type = types.submodule {
+          imports = [ hookModule ];
+        };
+      };
       clippy = mkOption {
         description = "clippy hook";
         type = types.submodule
@@ -2149,6 +2162,37 @@ in
           entry = "${hooks.check-executables-have-shebangs.package}/bin/check-executables-have-shebangs";
           types = [ "text" "executable" ];
           stages = [ "pre-commit" "pre-push" "manual" ];
+        };
+      check-hooks-apply =
+        {
+          name = "check-hooks-apply";
+          description = "Ensures that the configured hooks apply to at least one file in the repository.";
+          package = tools.pre-commit;
+          entry =
+            let
+              script = pkgs.writeShellScript "check-useless-excludes" ''
+                ${pkgs.python3}/bin/python ${hooks.check-hooks-apply.package}/pre_commit/meta_hooks/check_hooks_apply.py
+              '';
+            in
+            builtins.toString script;
+          types = [ ];
+          stages = [ "pre-commit" "manual" ];
+        };
+      check-useless-excludes =
+        {
+          name = "check-useless-excludes";
+          description = "Ensures that exclude directives apply to any file in the repository.";
+          package = tools.pre-commit;
+          entry =
+            let
+              script = pkgs.writeShellScript "check-useless-excludes" ''
+                # TODO: have the python interpreter be configurable, maybe as option.*.package?
+                ${pkgs.python3}/bin/python ${hooks.check-useless-excludes.package}/pre_commit/mta_hooks/check_useless_excludes.py
+              '';
+            in
+            builtins.toString script;
+          types = [ ];
+          stages = [ "pre-commit" "manual" ];
         };
       check-json =
         {
