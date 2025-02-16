@@ -678,6 +678,12 @@ in
           };
         };
       };
+      just-fmt = mkOption {
+        description = "";
+        type = types.submodule {
+          imports = [ hookModule ];
+        };
+      };
       latexindent = mkOption {
         description = "latexindent hook";
         type = types.submodule {
@@ -2897,6 +2903,17 @@ lib.escapeShellArgs (lib.concatMap (ext: [ "--ghc-opt" "-X${ext}" ]) hooks.ormol
                 exit(1)
             end'
           '';
+        };
+      just-fmt =
+        {
+          name = "just-fmt";
+          description = "";
+          types = ["file" "justfile"];
+          files = "[jJ][uU][sS][tT][fF][iI][lL][eE]";
+          package = tools.just;
+          # TODO: this will only check if formatting is correct. run again without --check to actually format
+          # wrap in SehllScript
+          entry = "${hooks.just.package}/bin/just --unstable --check --fmt";
         };
       latexindent =
         {

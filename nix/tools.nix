@@ -37,6 +37,7 @@
 , hlint
 , hpack
 , html-tidy
+, just
 , luaPackages
 , lua-language-server
 , lychee
@@ -134,6 +135,7 @@ in
     html-tidy
     lychee
     julia-bin
+    just
     mdl
     mdsh
     nil
