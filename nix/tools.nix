@@ -31,6 +31,7 @@
 , elmPackages
 , flake-checker ? null
 , fprettify
+, git
 , git-annex
 , gitlint
 , gptcommit ? null
@@ -130,6 +131,7 @@ in
     elixir
     flake-checker
     fprettify
+    git
     gitlint
     go
     go-tools

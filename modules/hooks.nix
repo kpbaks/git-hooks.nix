@@ -614,6 +614,20 @@ in
           };
         };
       };
+      git-stripspace = mkOption {
+        description = "git-stripspace hook";
+        type = types.submodule {
+          imports = [ hookModule ];
+          options.settings = {
+            flags = mkOption {
+              type = types.listOf types.str;
+              description = "Flags passed to `git stripspace`. See all available [here](https://git-scm.com/docs/git-stripspace#_options)";
+              default = [ ];
+              example = [ "--strip-comments" ];
+            };
+          };
+        };
+      };
       golines = mkOption {
         description = "golines hook";
         type = types.submodule {
@@ -2772,6 +2786,22 @@ lib.escapeShellArgs (lib.concatMap (ext: [ "--ghc-opt" "-X${ext}" ]) hooks.fourm
         package = tools.gitlint;
         entry = "${hooks.gitlint.package}/bin/gitlint --staged --msg-filename";
         stages = [ "commit-msg" ];
+      };
+      git-stripspace = {
+        name = "git-stripspace";
+        description = ''
+          [git-stripspace](https://git-scm.com/docs/git-stripspace) - Remove unnecessary whitespace
+
+          - Remove trailing whitespace from all lines.
+          - Collapse multiple consecutive empty lines into one empty line.
+          - Remove empty lines from the beginning and end of the input.
+          - Add a missing \n to the last line if necessary.
+        '';
+        types = [ "text" ];
+        stages = [ "pre-commit" "pre-push" "manual" ];
+        package = tools.git;
+        entry = "${hooks.git-stripspace.package}/bin/git stripspace ${lib.concatStringsSep " " hooks.git-stripspace.settings.flags}";
+        pass_filenames = false;
       };
       gofmt =
         {
