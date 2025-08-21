@@ -2981,7 +2981,14 @@ lib.escapeShellArgs (lib.concatMap (ext: [ "--ghc-opt" "-X${ext}" ]) hooks.fourm
         name = "grafana alloy validate";
         description = "Validate Grafana Alloy configuration files";
         package = tools.grafana-alloy;
-        entry = "${hooks.grafana-alloy-fmt.package}/bin/alloy validate --stability.level=${hooks.grafana-alloy-validate.settings.stability-level}";
+        entry =
+         builtins.concatStringsSep " "
+         [
+           "${hooks.grafana-alloy-fmt.package}/bin/alloy validate"
+           "--config.format=${hooks.grafana-alloy-validate.settings.format}"
+           "--stability.level=${hooks.grafana-alloy-validate.settings.stability-level}"
+         ] ++ lib.optional hooks.grafana-alloy-validate.settings.enable-community-components "--feature.community-components.enabled";
+
         files = [ "\\.alloy$" ];
         pass_filenames = true;
         entry =
