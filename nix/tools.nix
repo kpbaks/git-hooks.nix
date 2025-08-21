@@ -34,6 +34,7 @@
 , git-annex
 , gitlint
 , gptcommit ? null
+, grafana-alloy
 , hadolint
 , haskellPackages
 , hindent
@@ -138,6 +139,7 @@ in
     golangci-lint
     golines
     gptcommit
+    grafana-alloy
     hadolint
     hindent
     hlint
