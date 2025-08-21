@@ -2991,29 +2991,7 @@ lib.escapeShellArgs (lib.concatMap (ext: [ "--ghc-opt" "-X${ext}" ]) hooks.fourm
 
         files = [ "\\.alloy$" ];
         pass_filenames = true;
-        entry =
-          let
-            s
-              in;
-              # entry =
-              #   let
-              #     script = pkgs.writeShellScript "precommit-golines" ''
-              #       set -e
-              #       failed=false
-              #       for file in "$@"; do
-              #           # redirect stderr so that violations and summaries are properly interleaved.
-              #           if ! ${hooks.golines.package}/bin/golines ${hooks.golines.settings.flags} -w "$file" 2>&1
-              #           then
-              #               failed=true
-              #           fi
-              #       done
-              #       if [[ $failed == "true" ]]; then
-              #           exit 1
-              #       fi
-              #     '';
-              #   in
-              #   builtins.toString script;
-              # files = "\\.go$";
+
               };
               hadolint =
               {
