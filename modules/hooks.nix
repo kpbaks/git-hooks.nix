@@ -3124,6 +3124,16 @@ lib.escapeShellArgs (lib.concatMap (ext: [ "--ghc-opt" "-X${ext}" ]) hooks.fourm
           entry = "${hooks.hunspell.package}/bin/hunspell -l";
           files = "\\.((txt)|(html)|(xml)|(md)|(org)|(rst)|(tex)|(odf)|\\d)$";
         };
+      hurl =
+        {
+          name = "hurlfmt";
+          description = "Format hurl files.";
+          package = tools.hurl;
+          # TODO: wrap in a script that calls `hurlfmt --check <file> && hurlfmt --in-place <file>`
+          # as `--check` and `--in-place` cannot be used in the same invocation.
+          entry = "${hooks.hurl}/bin/hurlfmt --check";
+          files = "\\.hurl$";
+        };
       isort =
         {
           name = "isort";
