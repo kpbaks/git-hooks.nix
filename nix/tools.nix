@@ -47,6 +47,7 @@
 , keep-sorted
 , luaPackages
 , lua-language-server
+, ls-lint
 , lychee
 , julia-bin
 , mdformat
@@ -156,6 +157,7 @@ in
     hpack
     html-tidy
     keep-sorted
+    ls-lint
     lychee
     mdformat
     mdl

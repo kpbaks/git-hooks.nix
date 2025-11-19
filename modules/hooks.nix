@@ -762,6 +762,17 @@ in
           imports = [ hookModule ];
         };
       };
+      ls-lint = mkOption {
+        description = "ls-lint hook";
+        type = types.submodule {
+          imports = [ hookModule ];
+          options.config = mkOption {
+            type = lib.types.listOf lib.types.str; # TODO: also support plain string
+            description = "Configuration file(s) containing rules. Multiple files are merged together. See https://ls-lint.org/2.3/configuration/the-basics.html#creating-configuration";
+            default = [ ".ls-lint.yml" ];
+          };
+        };
+      };
       lua-ls = mkOption {
         description = "lua-ls hook";
         type = types.submodule {
@@ -3239,6 +3250,18 @@ lib.escapeShellArgs (lib.concatMap (ext: [ "--ghc-opt" "-X${ext}" ]) hooks.fourm
           types = [ "file" "tex" ];
           package = tools.lacheck;
           entry = "${script}";
+        };
+      ls-lint =
+        {
+          name = "ls-lint";
+          description = "Check your projects filesystem structure matches your expectation about it"; # FIXME: use non personal wording
+          package = tools.ls-lint;
+          # TODO: respect --config flag to override .ls-lint.ya?ml location https://ls-lint.org/2.3/configuration/the-command-line-interface.html#options.html
+          # accept both a single string for config or a list of configs, since it supports merging them together
+          # IDEA: detect a proper bglogstash-instance config
+          # TODO: wrap in script to check if a .ls-lint.ya?ml file, which is needed for this lint to make sense.
+          # add a helpful error if it is not, of how to get started with the hook
+          entry = "${hooks.ls-lint.package}/bin/ls-lint --config .ls-lint.yml";
         };
       lua-ls =
         let
