@@ -6,6 +6,7 @@
 , alejandra
 , ansible-lint
 , biome
+, buf
 , cabal2nix
 , callPackage
 , cargo

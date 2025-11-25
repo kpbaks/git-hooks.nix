@@ -229,6 +229,18 @@ in
           };
         };
       };
+      buf-lint = mkOption {
+        description = "buf-lint hook";
+        type = types.submodule {
+          imports = [ hookModule ];
+          options.config = mkOption {
+            type = types.str;
+            description = "The buf.yaml file to use for configuration";
+            default = "buf.yaml";
+            example = "schemas/buf.yaml";
+          };
+        };
+      };
       cabal2nix = mkOption {
         description = "cabal2nix hook";
         type = types.submodule {
@@ -2302,6 +2314,40 @@ in
           package = tools.black;
           entry = "${hooks.black.package}/bin/black ${hooks.black.settings.flags}";
           types = [ "file" "python" ];
+        };
+      buf-breaking =
+        {
+          name = "buf-breaking";
+          description = "Lint Protocol Buffer .proto files";
+          package = tools.buf;
+          # TODO: add option to control buf schema registry to check against
+          # --against-config
+          # --against-registry
+          entry = "${hooks.buf.package}/bin/buf breaking --limit-to-input-files";
+          files = "\\.proto$";
+          pass_filenames = true;
+          after = [ "buf-format" ];
+        };
+      buf-format =
+        {
+          name = "buf-format";
+          description = "Format Protocol Buffer .proto files";
+          package = tools.buf;
+          entry = "${hooks.buf.package}/bin/buf format --exit-code --write";
+          files = "\\.proto$";
+          pass_filenames = false;
+        };
+      buf-lint =
+        {
+          name = "buf-lint";
+          description = "Lint Protocol Buffer .proto files";
+          package = tools.buf;
+          # TODO: figure out how the command react if buf.yaml (default) does not exist and
+          # the user has not set buf-lint.config, should it default to not set --config?
+          entry = "${hooks.buf.package}/bin/buf lint --config ${hooks.buf.config} --path";
+          files = "\\.proto$";
+          pass_filenames = true;
+          after = [ "buf-format" ];
         };
       cabal-fmt =
         {
