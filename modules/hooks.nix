@@ -3313,6 +3313,14 @@ lib.escapeShellArgs (lib.concatMap (ext: [ "--ghc-opt" "-X${ext}" ]) hooks.fourm
             end'
           '';
         };
+      just-lsp-analyze =
+        {
+          name = "just-lsp-analyze";
+          description = "Check for diagnostics emitted by just-lsp";
+          files = "[Ju]stfile"; # TODO: not sufficient
+          package = tools.just-lsp;
+          entry = "${hooks.just-lsp.package}/bin/just-lsp analyze"; # FIXME: does it handle multiple files, or do we need to wrap, also we need to configure it to return != on diagnostics being emitted.
+        };
       keep-sorted =
         {
           name = "keep-sorted";

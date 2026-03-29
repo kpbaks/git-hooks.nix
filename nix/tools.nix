@@ -43,6 +43,7 @@
 , hlint
 , hpack
 , html-tidy
+, just-lsp
 , keep-sorted
 , luaPackages
 , lua-language-server
